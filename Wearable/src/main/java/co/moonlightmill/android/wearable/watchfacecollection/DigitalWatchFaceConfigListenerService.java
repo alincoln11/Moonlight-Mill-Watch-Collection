@@ -28,6 +28,8 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 import java.util.concurrent.TimeUnit;
 
+import co.moonlightmill.android.watchfacecollection.R;
+
 /**
  * A {@link WearableListenerService} listening for {@link DigitalWatchFaceService} config messages
  * and updating the config {@link com.google.android.gms.wearable.DataItem} accordingly.

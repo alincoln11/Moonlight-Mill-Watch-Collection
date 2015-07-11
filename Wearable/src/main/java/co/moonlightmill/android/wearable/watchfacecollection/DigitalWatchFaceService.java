@@ -53,6 +53,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import co.moonlightmill.android.watchfacecollection.R;
+
 /**
  * Sample digital watch face with blinking colons and seconds. In ambient mode, the seconds are
  * replaced with an AM/PM indicator and the colons don't blink. On devices with low-bit ambient

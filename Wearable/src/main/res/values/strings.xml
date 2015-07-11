@@ -25,6 +25,7 @@
     <string name="digital_am">AM</string>
     <string name="digital_pm">PM</string>
     <string name="calendar_name">Sample Calendar</string>
+    <string name="bauhaus_name">Bauhaus</string>
     <plurals name="calendar_meetings">
         <item quantity="one">&lt;br&gt;&lt;br&gt;&lt;br&gt;You have &lt;b&gt;%1$d&lt;/b&gt; meeting in the next 24 hours.</item>
         <item quantity="other">&lt;br&gt;&lt;br&gt;&lt;br&gt;You have &lt;b&gt;%1$d&lt;/b&gt; meetings in the next 24 hours.</item>

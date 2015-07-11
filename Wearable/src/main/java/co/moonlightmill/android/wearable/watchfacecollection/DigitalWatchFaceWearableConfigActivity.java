@@ -38,6 +38,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.Wearable;
 
+import co.moonlightmill.android.watchfacecollection.R;
+
 /**
  * The watch-side config activity for {@link DigitalWatchFaceService}, which allows for setting the
  * background color.

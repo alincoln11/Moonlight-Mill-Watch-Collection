@@ -43,6 +43,8 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import co.moonlightmill.android.watchfacecollection.R;
+
 /**
  * Proof of concept sample watch face that demonstrates how a watch face can load calendar data.
  */

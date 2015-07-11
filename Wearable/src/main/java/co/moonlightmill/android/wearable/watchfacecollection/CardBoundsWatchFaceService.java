@@ -25,6 +25,8 @@ import android.support.wearable.watchface.WatchFaceStyle;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import co.moonlightmill.android.watchfacecollection.R;
+
 /**
  * Proof of concept sample watch face that demonstrates how a watch face can detect where the peek
  * card is. This watch face draws a border around the area where the peeking card is.
