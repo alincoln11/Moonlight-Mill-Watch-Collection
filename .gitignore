@@ -4,3 +4,9 @@
 /.idea/libraries
 .DS_Store
 /build
+Application/build
+Application/build/generated
+Application/build/intermediates
+Wearable/build
+Wearable/build/generated
+Wearable/build/intermediates
