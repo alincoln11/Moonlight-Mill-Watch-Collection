@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.wearable.watchface;
+package co.moonlightmill.android.wearable.watchfacecollection;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -44,7 +44,7 @@ public class TiltWatchFaceService extends Gles2WatchFaceService {
     /** Expected frame rate in interactive mode. */
     private static final long FPS = 60;
 
-    /** Z distance from the camera to the watchface. */
+    /** Z distance from the camera to the co.moonlightmill.android.watchfacecollection. */
     private static final float EYE_Z = -2.3f;
 
     /** How long each frame is displayed at expected frame rate. */

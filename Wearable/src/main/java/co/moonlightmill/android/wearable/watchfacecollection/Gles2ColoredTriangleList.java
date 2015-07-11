@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.wearable.watchface;
+package co.moonlightmill.android.wearable.watchfacecollection;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -124,7 +124,7 @@ public class Gles2ColoredTriangleList {
     /**
      * Checks if any of the GL calls since the last time this method was called set an error
      * condition. Call this method immediately after calling a GL method. Pass the name of the GL
-     * operation. For example:
+     * operation. For co.moonlightmill:
      *
      * <pre>
      * mColorHandle = GLES20.glGetUniformLocation(mProgram, "uColor");

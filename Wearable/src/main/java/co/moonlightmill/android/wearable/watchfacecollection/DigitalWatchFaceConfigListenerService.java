@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.wearable.watchface;
+package co.moonlightmill.android.wearable.watchfacecollection;
 
 import android.os.Bundle;
 import android.util.Log;
