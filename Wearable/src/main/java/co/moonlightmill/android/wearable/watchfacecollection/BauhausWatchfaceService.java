@@ -5,10 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -48,10 +49,13 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
         Paint mMinutePaint;
         Paint mSecondPaint;
         Paint mTickPaint;
+        Paint mCenterCirclePaint;
         boolean mMute;
         Calendar mCalendar;
 
-        /** Handler to update the time once a second in interactive mode. */
+        /**
+         * Handler to update the time once a second in interactive mode.
+         */
         final Handler mUpdateTimeHandler = new Handler() {
             @Override
             public void handleMessage(Message message) {
@@ -87,6 +91,9 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
          */
         boolean mLowBitAmbient;
 
+//        Bitmap mHourBitmap;
+//        Bitmap mHourScaledBitmap;
+        int mBackgroundColor;
 
         @Override
         public void onCreate(SurfaceHolder holder) {
@@ -104,26 +111,33 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
             Resources resources = BauhausWatchfaceService.this.getResources();
 
             mHourPaint = new Paint();
-            mHourPaint.setARGB(255, 200, 200, 200);
+            mHourPaint.setColor(resources.getColor(R.color.bauhaus_light_blue));
             mHourPaint.setStrokeWidth(5.f);
             mHourPaint.setAntiAlias(true);
             mHourPaint.setStrokeCap(Paint.Cap.ROUND);
 
             mMinutePaint = new Paint();
-            mMinutePaint.setARGB(255, 200, 200, 200);
+            mMinutePaint.setColor(resources.getColor(R.color.bauhaus_purple));
             mMinutePaint.setStrokeWidth(3.f);
             mMinutePaint.setAntiAlias(true);
             mMinutePaint.setStrokeCap(Paint.Cap.ROUND);
 
             mSecondPaint = new Paint();
+            mSecondPaint.setColor(resources.getColor(R.color.bauhaus_mint_green));
             mSecondPaint.setStrokeWidth(2.f);
             mSecondPaint.setAntiAlias(true);
             mSecondPaint.setStrokeCap(Paint.Cap.ROUND);
 
             mTickPaint = new Paint();
-            mTickPaint.setARGB(100, 255, 255, 255);
+            mTickPaint.setColor(resources.getColor(R.color.white));
             mTickPaint.setStrokeWidth(2.f);
             mTickPaint.setAntiAlias(true);
+
+            mCenterCirclePaint = new Paint();
+            mCenterCirclePaint.setColor(resources.getColor(R.color.bauhaus_yellow));
+            mCenterCirclePaint.setStrokeWidth(5.f);
+            mCenterCirclePaint.setAntiAlias(true);
+            mCenterCirclePaint.setStrokeCap(Paint.Cap.ROUND);
 
             mCalendar = Calendar.getInstance();
         }
@@ -187,6 +201,12 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
 
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+//            if (mHourScaledBitmap == null
+//                    || mHourScaledBitmap.getWidth() != width
+//                    || mHourScaledBitmap.getHeight() != height) {
+//                mHourScaledBitmap = Bitmap.createScaledBitmap(mHourBitmap,
+//                        width, height, true /* filter */);
+//            }
             super.onSurfaceChanged(holder, format, width, height);
         }
 
@@ -198,6 +218,11 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
             int height = bounds.height();
 
             // Draw the background, scaled to fit.
+//            canvas.drawBitmap(mBackgroundScaledBitmap, 0, 0, null);
+
+            //  TODO make this selectable using preferences
+            mBackgroundColor = getResources().getColor(R.color.bauhaus_peach);
+            canvas.drawColor(mBackgroundColor);
 
             // Find the center. Ignore the window insets so that, on round watches with a
             // "chin", the watch face is centered on the entire screen, not just the usable
@@ -207,8 +232,11 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
 
             // Draw the ticks.
             float innerTickRadius = centerX - 10;
+            for (int tickIndex = 0; tickIndex < 4; tickIndex++) {
+                float tickRot = tickIndex * TWO_PI / 4;
                 float innerX = (float) Math.sin(tickRot) * innerTickRadius;
                 float innerY = (float) -Math.cos(tickRot) * innerTickRadius;
+                canvas.drawCircle(centerX + innerX, centerY + innerY, 5, mTickPaint);
             }
 
             float seconds =
@@ -221,7 +249,7 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
 
             float secLength = centerX - 20;
             float minLength = centerX - 40;
-            float hrLength = centerX - 80;
+            float hrLength = centerX - 10;
 
             if (!isInAmbientMode()) {
                 float secX = (float) Math.sin(secRot) * secLength;
@@ -229,13 +257,41 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
                 canvas.drawLine(centerX, centerY, centerX + secX, centerY + secY, mSecondPaint);
             }
 
-            float minX = (float) Math.sin(minRot) * minLength;
-            float minY = (float) -Math.cos(minRot) * minLength;
-            canvas.drawLine(centerX, centerY, centerX + minX, centerY + minY, mMinutePaint);
-
             float hrX = (float) Math.sin(hrRot) * hrLength;
             float hrY = (float) -Math.cos(hrRot) * hrLength;
-            canvas.drawLine(centerX, centerY, centerX + hrX, centerY + hrY, mHourPaint);
+
+            int hrSizeOffset = 16;
+            float hrWidthOffset = hrSizeOffset * (float)-Math.cos(hrRot);
+            float hrBaseYOffset = hrSizeOffset * (float) Math.sin(hrRot);
+
+            Path hourPath = new Path();
+            hourPath.setFillType(Path.FillType.EVEN_ODD);
+            hourPath.moveTo(centerX - hrWidthOffset, centerY + hrBaseYOffset);
+            hourPath.lineTo(centerX + hrX, centerY + hrY);
+            hourPath.lineTo(centerX + hrWidthOffset, centerY - hrBaseYOffset);
+            hourPath.lineTo(centerX - hrWidthOffset, centerY + hrBaseYOffset);
+            hourPath.close();
+            canvas.drawPath(hourPath, mHourPaint);
+
+
+            final float minX = (float) Math.sin(minRot) * minLength;
+            final float minY = (float) -Math.cos(minRot) * minLength;
+//            final float minMidX = ((minX - centerX)/2) * (float)-Math.cos(minRot);
+//            final float minMidY = ((minY - centerY)/2) * (float)Math.sin(minRot);
+//
+//            RectF oval = new RectF();
+//            float startAngle = getSemicircle(centerX, centerY, minX, minY, oval,"right");
+//
+//            Path minPath = new Path();
+//            minPath.setFillType(Path.FillType.EVEN_ODD);
+//            minPath.addArc(oval, startAngle, (float)Math.sin(minRot) * 1);
+//            minPath.close();
+//              TODO Figure out how to draw a semicircle
+//            canvas.drawPath(minPath, mMinutePaint);
+            canvas.drawLine(centerX, centerY, centerX + minX, centerY + minY, mMinutePaint);
+
+
+            canvas.drawCircle(centerX, centerY, 8, mCenterCirclePaint);
         }
 
         @Override
