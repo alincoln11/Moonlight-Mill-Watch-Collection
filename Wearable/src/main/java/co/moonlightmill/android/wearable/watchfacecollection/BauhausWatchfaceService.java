@@ -9,8 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -89,8 +87,6 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
          */
         boolean mLowBitAmbient;
 
-        Bitmap mBackgroundBitmap;
-        Bitmap mBackgroundScaledBitmap;
 
         @Override
         public void onCreate(SurfaceHolder holder) {
@@ -106,8 +102,6 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
                     .build());
 
             Resources resources = BauhausWatchfaceService.this.getResources();
-            Drawable backgroundDrawable = resources.getDrawable(R.drawable.bg, null /* theme */);
-            mBackgroundBitmap = ((BitmapDrawable) backgroundDrawable).getBitmap();
 
             mHourPaint = new Paint();
             mHourPaint.setARGB(255, 200, 200, 200);
@@ -122,7 +116,6 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
             mMinutePaint.setStrokeCap(Paint.Cap.ROUND);
 
             mSecondPaint = new Paint();
-            mSecondPaint.setARGB(255, 255, 0, 0);
             mSecondPaint.setStrokeWidth(2.f);
             mSecondPaint.setAntiAlias(true);
             mSecondPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -194,12 +187,6 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
 
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            if (mBackgroundScaledBitmap == null
-                    || mBackgroundScaledBitmap.getWidth() != width
-                    || mBackgroundScaledBitmap.getHeight() != height) {
-                mBackgroundScaledBitmap = Bitmap.createScaledBitmap(mBackgroundBitmap,
-                        width, height, true /* filter */);
-            }
             super.onSurfaceChanged(holder, format, width, height);
         }
 
@@ -211,7 +198,6 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
             int height = bounds.height();
 
             // Draw the background, scaled to fit.
-            canvas.drawBitmap(mBackgroundScaledBitmap, 0, 0, null);
 
             // Find the center. Ignore the window insets so that, on round watches with a
             // "chin", the watch face is centered on the entire screen, not just the usable
@@ -221,15 +207,8 @@ public class BauhausWatchfaceService extends CanvasWatchFaceService {
 
             // Draw the ticks.
             float innerTickRadius = centerX - 10;
-            float outerTickRadius = centerX;
-            for (int tickIndex = 0; tickIndex < 12; tickIndex++) {
-                float tickRot = tickIndex * TWO_PI / 12;
                 float innerX = (float) Math.sin(tickRot) * innerTickRadius;
                 float innerY = (float) -Math.cos(tickRot) * innerTickRadius;
-                float outerX = (float) Math.sin(tickRot) * outerTickRadius;
-                float outerY = (float) -Math.cos(tickRot) * outerTickRadius;
-                canvas.drawLine(centerX + innerX, centerY + innerY,
-                        centerX + outerX, centerY + outerY, mTickPaint);
             }
 
             float seconds =

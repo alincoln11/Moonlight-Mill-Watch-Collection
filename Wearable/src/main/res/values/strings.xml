@@ -14,7 +14,7 @@
  limitations under the License.
 -->
 <resources>
-    <string name="app_name">WatchFace</string>
+    <string name="app_name">Moonlight Mill</string>
     <string name="tilt_name">Sample Tilt</string>
     <string name="analog_name">Sample Analog</string>
     <string name="sweep_name">Sample Sweep</string>

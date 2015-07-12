@@ -21,4 +21,17 @@
     <color name="config_activity_header_text_color">#959595</color>
     <color name="color_item_label_color">#000000</color>
     <color name="color_item_circle_border_color">#424242</color>
+
+    <!--          Bauhaus Colors               -->
+    <color name="bauhaus_blue">#3131E8</color>
+    <color name="bauhaus_light_blue">#BDF2F2</color>
+    <color name="bauhaus_mint_green">#CFF91E</color>
+    <color name="bauhaus_orange">#F28A0C</color>
+    <color name="bauhaus_peach">#EFA3A3</color>
+    <color name="bauhaus_pink">#FFB3F1</color>
+    <color name="bauhaus_purple">#3F12CC</color>
+    <color name="bauhaus_yellow">#F7F361</color>
+
+
+
 </resources>
